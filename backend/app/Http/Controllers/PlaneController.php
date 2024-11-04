@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
+use function PHPUnit\Framework\isNan;
 use function PHPUnit\Framework\isNull;
 
 class PlaneController extends Controller
@@ -52,7 +53,11 @@ class PlaneController extends Controller
     }
 
     public function show(int $id){
-
+        $plane = $this->getPlanesCollection()->where('id','=',$id)->first();
+        if(is_null($plane)){
+            abort(404);
+        }
+        return view('plane.show', ['title'=>$plane['manufacturer'].' '.$plane['family'], 'plane'=>$plane]);
     }
 
     private function getPlanesCollection():Collection {
